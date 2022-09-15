@@ -1,4 +1,5 @@
-ReadMe Instructions
+ReadMe Instructions:
+
 My GitHub repository contains two folders: server and client. The client folder contains utilities.py and client.py. 
 The server folder contains server.py, bruh.txt, and a folder named Images and utilities.py. 
 After cloning the repository, you can open two command prompts and first run the server.py and then run the client.py to test the commands. 
