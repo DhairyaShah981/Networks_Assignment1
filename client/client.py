@@ -2,9 +2,11 @@
 import socket
 import utilities
 import sys
-
+import timeit
 # Assigning host and port
-HOST = '192.168.56.1'
+HOST = '10.0.0.1' #IP of mininet host
+#HOST = '10.0.2.15' (eth0 IP of Kali Linux system) -> Use this when running on Kali Linux without Mininet
+#HOST = '10.7.56.70' -> Use this when running on Windows 
 PORT = utilities.PORT
 
 # Main block of client executes only if __name__ == '__main__'
@@ -33,6 +35,7 @@ if __name__ == '__main__':
                     break
                 # If the command is dwd then write the file in user
                 elif tokens[0] == "dwd":
+                    begin = timeit.default_timer()
                     utilities.send_msg(sock, msg)
                     filename = tokens[1]
                     for i in range(2, len(tokens)):
@@ -49,9 +52,14 @@ if __name__ == '__main__':
                                 break
                         f.close()
                     msg = utilities.recv_msg(sock)
+                    end = timeit.default_timer()
+                    interval = round((end - begin),3)
+                    
                     print(msg)
+                    print(f"Time taken for download: {interval}s")
                 # If the command is upd then write the file in user
                 elif tokens[0] == "upd":
+                    begin = timeit.default_timer()
                     utilities.send_msg(sock, msg)
                     filename = tokens[1]
                     for i in range(2, len(tokens)):
@@ -66,7 +74,11 @@ if __name__ == '__main__':
                             sock.sendall(data)
                         f.close()
                     msg = utilities.recv_msg(sock)
+                    end = timeit.default_timer()
+                    interval = round((end - begin),3)
+                    
                     print(msg)
+                    print(f"Time taken for upload: {interval}s")
 
                 # All the commands except upload, download and exit are handled here
                 else:
@@ -86,6 +98,7 @@ if __name__ == '__main__':
                     print("Connection closed!")
                     break
                 elif tokens[0] == "dwd":
+                    begin = timeit.default_timer()
                     utilities.send_msg(sock, utilities.encrypt_sub(msg))
                     filename = tokens[1]
                     for i in range(2, len(tokens)):
@@ -100,9 +113,12 @@ if __name__ == '__main__':
                             if len(data) < 1024:
                                 break
                         f.close()
-                        msg = utilities.recv_msg(sock)
-                        msg = utilities.decrypt_sub(msg)
-                        print(msg)
+                    msg = utilities.recv_msg(sock)
+                    msg = utilities.decrypt_sub(msg)
+                    print(msg)
+                    end = timeit.default_timer()
+                    interval = round((end - begin),3)
+                    print(f"Time taken for download: {interval}s")
 
                 elif tokens[0] == "upd":
 
@@ -122,7 +138,10 @@ if __name__ == '__main__':
                         f.close()
                     msg = utilities.recv_msg(sock)
                     msg = utilities.decrypt_sub(msg)
+                    end = timeit.default_timer()
+                    interval = round((end - begin),3)
                     print(msg)
+                    print(f"Time taken for upload: {interval}s")
                 else:
 
                     utilities.send_msg(sock, utilities.encrypt_sub(msg))
@@ -142,7 +161,7 @@ if __name__ == '__main__':
                     print("Connection closed!")
                     break
                 elif tokens[0] == "dwd":
-
+                    begin = timeit.default_timer()
                     utilities.send_msg(sock, utilities.transpose(msg))
                     filename = tokens[1]
                     for i in range(2, len(tokens)):
@@ -163,9 +182,12 @@ if __name__ == '__main__':
                     msg = utilities.recv_msg(sock)
                     msg = utilities.transpose(msg)
                     print(msg)
+                    end = timeit.default_timer()
+                    interval = round((end - begin),3)
+                    print(f"Time taken for download: {interval}s")
 
                 elif tokens[0] == "upd":
-
+                    begin = timeit.default_timer()
                     utilities.send_msg(sock, utilities.transpose(msg))
                     filename = tokens[1]
                     for i in range(2, len(tokens)):
@@ -183,7 +205,10 @@ if __name__ == '__main__':
 
                     msg = utilities.recv_msg(sock)
                     msg = utilities.transpose(msg)
+                    end = timeit.default_timer()
+                    interval = round((end - begin),3)
                     print(msg)
+                    print(f"Time taken for upload: {interval}s")
                 else:
                     utilities.send_msg(sock, utilities.transpose(msg))
                     print('Sent message: {}'.format(msg))
